@@ -1,0 +1,14 @@
+{
+    "ru": {
+        "play": "Играть",
+        "settings": "Настройки",
+        "back": "Назад",
+        "exit": "Выход"
+    },
+    "en": {
+        "play": "Play",
+        "settings": "Settings",
+        "back": "Back",
+        "exit": "Exit"
+    }
+}

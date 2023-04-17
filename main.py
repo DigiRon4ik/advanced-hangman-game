@@ -37,6 +37,21 @@ def close(msg=None) -> None:
     __import__('sys').exit(msg)
 
 
+def input_choice(expected: list, menu, input_msg='') -> int | str:
+    choice = 0
+    while True:
+        try:
+            choice = int(input(Style.BRIGHT + Fore.YELLOW + '  -->   ' +
+                               Fore.GREEN + input_msg))
+            if choice in expected:
+                print()
+                return choice
+            else:
+                menu(inp=False)
+        except:
+            menu(inp=False)
+
+
 def print_log(msg: str, style=0, color=Fore.MAGENTA) -> None:
     if style == 0:
         style = Style.NORMAL
@@ -45,6 +60,16 @@ def print_log(msg: str, style=0, color=Fore.MAGENTA) -> None:
 
     print(Style.BRIGHT + Fore.CYAN + ' >> (log) | ' +
           style + color + msg)
+
+
+def print_txt(befor: str, after: str, style=0, color=Fore.BLUE) -> None:
+    if style == 0:
+        style = Style.NORMAL
+    else:
+        style = Style.BRIGHT if style == 1 else Style.DIM
+
+    print(Style.BRIGHT + Fore.YELLOW + befor +
+          style + color + after)
 
 
 def print_intro() -> None:
@@ -115,10 +140,23 @@ def init_translations(lang='en') -> None:
     sleep(1)
 
 
-def main_menu(clear=True) -> None:
+def main_menu(clear=True, inp=True) -> None:
     if clear:
         clear_screen()
-    print(f"1) {TRANSLATIONS['play']}\n")
+    print_txt('> (1) | ', f'{TRANSLATIONS["play"]}', 1)
+    print_txt('> (2) | ', f'{TRANSLATIONS["settings"]}', 1)
+    print_txt('> (3) | ', f'{TRANSLATIONS["exit"]}', 1)
+    if inp:
+        choice = input_choice((1, 2, 3), main_menu)
+        match choice:
+            case 1:
+                # play()
+                pass
+            case 2:
+                # settings()
+                pass
+            case 3:
+                close()
 
 
 def main() -> None:
@@ -126,7 +164,7 @@ def main() -> None:
     init_json()
     init_settings()
     init_translations()
-    # print_intro()
+    print_intro()
     main_menu(clear=False)
 
 

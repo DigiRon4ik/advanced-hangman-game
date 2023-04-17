@@ -2,13 +2,21 @@
     "ru": {
         "play": "Играть",
         "settings": "Настройки",
+        "words": "Язык Игры",
+        "language": "Язык Меню",
+        "difficulty": "Сложность",
         "back": "Назад",
-        "exit": "Выход"
+        "exit": "Выход",
+        "choice": "Выбор"
     },
     "en": {
         "play": "Play",
         "settings": "Settings",
+        "words": "Game Language",
+        "language": "Menu Language",
+        "difficulty": "Difficulty",
         "back": "Back",
-        "exit": "Exit"
+        "exit": "Exit",
+        "choice": "Choice"
     }
 }

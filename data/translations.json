@@ -2,33 +2,41 @@
     "ru": {
         "play": "Играть",
         "settings": "Настройки",
-        "words": "Язык Слов",
+        "lng_words": "Язык Слов",
         "language": "Язык Меню",
         "difficulty": "Сложность",
-        "lng_words": "Выбрать язык",
+        "lng_choose": "Выбрать язык",
         "add_word": "Добавить слово",
         "del_word": "Удалить слово",
+        "warning_add": "ВНИМАНИЕ: Вводите ТОЛЬКО буквы! Добавление существующего слова ничего не изменит.",
+        "category": "Категория",
+        "word": "Слово",
         "easy": "Легко",
         "normal": "Нормально",
         "hard": "Сложно",
         "back": "Назад",
         "exit": "Выход",
-        "choice": "Выбор"
+        "choice": "Выбор",
+        "wrong_choice": "НЕПРАВИЛЬНО: Попробуйте еще раз."
     },
     "en": {
         "play": "Play",
         "settings": "Settings",
-        "words": "Words Language",
+        "lng_words": "Words Language",
         "language": "Menu Language",
         "difficulty": "Difficulty",
-        "lng_words": "Choose a language",
+        "lng_choose": "Choose a language",
         "add_word": "Add word",
         "del_word": "Delete word",
+        "warning_add": "WARING: Enter ONLY letters! Adding an existing word won't change anything.",
+        "category": "Category",
+        "word": "Word",
         "easy": "Easy",
         "normal": "Normal",
         "hard": "Hard",
         "back": "Back",
         "exit": "Exit",
-        "choice": "Choice"
+        "choice": "Choice",
+        "wrong_choice": "WRONG: Try again."
     }
 }

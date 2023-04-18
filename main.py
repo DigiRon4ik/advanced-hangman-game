@@ -11,7 +11,7 @@ WORDS = {
     'ru': {
         'ПРОФЕССИЯ': ['СВАРЩИК', 'СПАСАТЕЛЬ', 'ПОВАР'],
         'ЖИВОТНОЕ': ['ЛИЧИНКА', 'МЕДУЗА', 'ОРАНГУТАН'],
-        'Транспорт': ['ПОЕЗД', 'ВЕЛОСИПЕД', 'ЛОКОМОТИВ']
+        'ТРАНСПОРТ': ['ПОЕЗД', 'ВЕЛОСИПЕД', 'ЛОКОМОТИВ']
     },
     'en': {
         'PROFESSION': ['WELDER', 'RESCUER', 'COOK'],
@@ -37,7 +37,7 @@ def close(msg=None) -> None:
     __import__('sys').exit(msg)
 
 
-def input_choice(expected: list, menu, input_msg='') -> int | str:
+def input_choice(expected: list, menu=None, input_msg='') -> int | str:
     choice = 0
     while True:
         try:
@@ -47,9 +47,12 @@ def input_choice(expected: list, menu, input_msg='') -> int | str:
                 print()
                 return choice
             else:
-                menu(inp=False)
+                raise
         except:
-            menu(inp=False)
+            if menu is not None:
+                menu(inp=False)
+            else:
+                print_txt('', TRANSLATIONS["wrong_choice"], 1, Fore.RED)
 
 
 def print_log(msg: str, style=0, color=Fore.MAGENTA) -> None:
@@ -88,14 +91,14 @@ def print_intro() -> None:
     sleep(1)
 
 
-def init_json() -> None:
+def init_json(mode='a+') -> None:
     global WORDS
-    with open('data/words.json', 'a+', encoding='utf-8') as file:
+    with open('data/words.json', mode=mode, encoding='utf-8') as file:
         file.seek(0)
         try:
             WORDS = json.load(file)
             print_log('JSON-words was loaded...', -1)
-        except json.decoder.JSONDecodeError:
+        except:
             json.dump(WORDS, file, indent=4, ensure_ascii=False)
             print_log('JSON-words was dumped...', -1)
         finally:
@@ -155,7 +158,6 @@ def main_menu(clear=True, inp=True) -> None:
                 pass
             case 2:
                 settings_menu()
-                pass
             case 3:
                 close()
 
@@ -163,12 +165,13 @@ def main_menu(clear=True, inp=True) -> None:
 def settings_menu(clear=True, inp=True) -> None:
     if clear:
         clear_screen()
+    print_txt('', TRANSLATIONS["settings"], 1, Fore.CYAN)
     print_txt(
-        '> (1) | ', f'{TRANSLATIONS["words"]}\t| {SETTINGS["words"]}', 1)
+        '> (1) | ', f'{TRANSLATIONS["lng_words"]}\t| {SETTINGS["words"]}')
     print_txt(
-        '> (2) | ', f'{TRANSLATIONS["language"]}\t| {SETTINGS["language"]}', 1)
+        '> (2) | ', f'{TRANSLATIONS["language"]}\t| {SETTINGS["language"]}')
     print_txt(
-        '> (3) | ', f'{TRANSLATIONS["difficulty"]}\t| {SETTINGS["difficulty"]}', 1)
+        '> (3) | ', f'{TRANSLATIONS["difficulty"]}\t| {SETTINGS["difficulty"]}')
     print_txt(
         '> (4) | ', TRANSLATIONS["back"], 1)
     if inp:
@@ -176,13 +179,10 @@ def settings_menu(clear=True, inp=True) -> None:
         match choice:
             case 1:
                 words_menu()
-                pass
             case 2:
                 language_menu()
-                pass
             case 3:
                 difficulty_menu()
-                pass
             case 4:
                 main_menu()
 
@@ -190,44 +190,44 @@ def settings_menu(clear=True, inp=True) -> None:
 def words_menu(clear=True, inp=True) -> None:
     if clear:
         clear_screen()
+    print_txt('', TRANSLATIONS["lng_words"], 1, Fore.CYAN)
     print_txt(
-        '> (1) | ', f'{TRANSLATIONS["lng_words"]}\t| {SETTINGS["words"]}', 1)
-    print_txt('> (2) | ', TRANSLATIONS["add_word"], 1)
-    print_txt('> (3) | ', TRANSLATIONS["del_word"], 1)
+        '> (1) | ', f'{TRANSLATIONS["lng_choose"]}\t| {SETTINGS["words"]}')
+    print_txt('> (2) | ', TRANSLATIONS["add_word"])
+    print_txt('> (3) | ', TRANSLATIONS["del_word"])
     print_txt('> (4) | ', TRANSLATIONS["back"], 1)
     if inp:
         choice = input_choice((1, 2, 3, 4), words_menu)
         match choice:
             case 1:
-                # lng_words_menu()
-                pass
+                lng_words_menu()
             case 2:
-                # add_word_menu()
-                pass
+                add_word_menu()
             case 3:
-                # del_word_menu()
+                del_word_menu()
                 pass
             case 4:
                 settings_menu()
 
 
+def print_lng() -> None:
+    print_txt('> (1) | ', 'ru')
+    print_txt('> (2) | ', 'en')
+    print_txt('> (3) | ', TRANSLATIONS["back"], 1)
+
+
 def language_menu(clear=True, inp=True) -> None:
     if clear:
         clear_screen()
-    print_txt('> (1) | ', 'ru', 1)
-    print_txt('> (2) | ', 'en', 1)
-    print_txt('> (3) | ', TRANSLATIONS["back"], 1)
+    print_txt('', TRANSLATIONS["language"], 1, Fore.CYAN)
+    print_lng()
     if inp:
         choice = input_choice((1, 2, 3), language_menu)
-        match choice:
-            case 1:
-                SETTINGS['language'] = 'ru'
-            case 2:
-                SETTINGS['language'] = 'en'
         if choice == 3:
             settings_menu()
-        elif choice in (1, 2):
-            init_settings('w')
+        else:
+            SETTINGS['language'] = 'ru' if choice == 1 else 'en'
+            init_settings(mode='w')
             init_translations(SETTINGS['language'])
             main_menu()
 
@@ -235,9 +235,10 @@ def language_menu(clear=True, inp=True) -> None:
 def difficulty_menu(clear=True, inp=True) -> None:
     if clear:
         clear_screen()
-    print_txt('> (1) | ', TRANSLATIONS["easy"], 1)
-    print_txt('> (2) | ', TRANSLATIONS["normal"], 1)
-    print_txt('> (3) | ', TRANSLATIONS["hard"], 1)
+    print_txt('', TRANSLATIONS["difficulty"], 1, Fore.CYAN)
+    print_txt('> (1) | ', TRANSLATIONS["easy"])
+    print_txt('> (2) | ', TRANSLATIONS["normal"])
+    print_txt('> (3) | ', TRANSLATIONS["hard"])
     print_txt('> (4) | ', TRANSLATIONS["back"], 1)
     if inp:
         choice = input_choice((1, 2, 3, 4), difficulty_menu)
@@ -250,9 +251,70 @@ def difficulty_menu(clear=True, inp=True) -> None:
                 SETTINGS['difficulty'] = 'hard'
         if choice == 4:
             settings_menu()
-        elif choice in (1, 2, 3):
-            init_settings('w')
+        else:
+            init_settings(mode='w')
             main_menu()
+
+
+def lng_words_menu(clear=True, inp=True) -> None:
+    if clear:
+        clear_screen()
+    print_txt('', TRANSLATIONS["lng_choose"], 1, Fore.CYAN)
+    print_lng()
+    if inp:
+        choice = input_choice((1, 2, 3), lng_words_menu)
+        if choice == 3:
+            words_menu()
+        else:
+            SETTINGS['words'] = 'ru' if choice == 1 else 'en'
+            init_settings(mode='w')
+            main_menu()
+
+
+def add_word_menu(clear=True, inp=True) -> None:
+    if clear:
+        clear_screen()
+    print_txt('', TRANSLATIONS["add_word"], 1, Fore.CYAN)
+    print_lng()
+    if inp:
+        choice = input_choice((1, 2, 3), add_word_menu)
+        print_txt('', TRANSLATIONS["warning_add"], 1, Fore.RED)
+        if choice == 3:
+            words_menu()
+        else:
+            lng = 'ru' if choice == 1 else 'en'
+            category = input(Style.BRIGHT + Fore.YELLOW + '  -->   ' +
+                             Fore.MAGENTA + f'{TRANSLATIONS["category"]}: ' +
+                             Fore.GREEN).upper()
+            word = input(Style.BRIGHT + Fore.YELLOW + '  -->   ' +
+                         Fore.MAGENTA + f'{TRANSLATIONS["word"]}: ' +
+                         Fore.GREEN).upper()
+            WORDS[lng].setdefault(category, []).append(word)
+            init_json(mode='w')
+            main_menu()
+
+
+def del_word_menu(clear=True, inp=True) -> None:
+    if clear:
+        clear_screen()
+    print_txt('', TRANSLATIONS["del_word"], 1, Fore.CYAN)
+    print_lng()
+    if inp:
+        choice = input_choice((1, 2, 3), add_word_menu)
+        if choice == 3:
+            words_menu()
+        else:
+            clear_screen()
+            lng = 'ru' if choice == 1 else 'en'
+            print_txt(f'{TRANSLATIONS["del_word"]} -> ', f'{lng}:', 1, Fore.CYAN)
+            i = 1
+            for category, words in WORDS[lng].items():
+                print_txt(f'> ({i})\t', f'{category}:', 1, Fore.CYAN)
+                for word in words:
+                    i += 1
+                    print_txt(f'> \t ({i})  ', f'{word}', 1)
+                i += 1
+            print_txt(f'> ({i}) ', TRANSLATIONS["back"], 1)
 
 
 def main() -> None:

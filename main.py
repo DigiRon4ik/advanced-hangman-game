@@ -103,12 +103,13 @@ def init_json() -> None:
     sleep(1)
 
 
-def init_settings() -> None:
+def init_settings(mode='a+') -> None:
     global SETTINGS
-    with open('data/settings.cfg', 'a+', encoding='utf-8') as file:
+    with open('data/settings.cfg', mode=mode, encoding='utf-8') as file:
         file.seek(0)
-        stg = file.read()
-        if len(stg) != 0:
+        if mode == 'a+':
+            stg = file.read()
+        if mode == 'a+' and len(stg) != 0:
             stg = stg.strip().replace('\n', '=').replace(' ', '').split('=')
             SETTINGS = {stg[i]: stg[i + 1] for i in range(0, len(stg), 2)}
             print_log('SETTINGS was loaded...', -1)
@@ -143,9 +144,9 @@ def init_translations(lang='en') -> None:
 def main_menu(clear=True, inp=True) -> None:
     if clear:
         clear_screen()
-    print_txt('> (1) | ', f'{TRANSLATIONS["play"]}', 1)
-    print_txt('> (2) | ', f'{TRANSLATIONS["settings"]}', 1)
-    print_txt('> (3) | ', f'{TRANSLATIONS["exit"]}', 1)
+    print_txt('> (1) | ', TRANSLATIONS["play"], 1)
+    print_txt('> (2) | ', TRANSLATIONS["settings"], 1)
+    print_txt('> (3) | ', TRANSLATIONS["exit"], 1)
     if inp:
         choice = input_choice((1, 2, 3), main_menu)
         match choice:
@@ -153,10 +154,105 @@ def main_menu(clear=True, inp=True) -> None:
                 # play()
                 pass
             case 2:
-                # settings()
+                settings_menu()
                 pass
             case 3:
                 close()
+
+
+def settings_menu(clear=True, inp=True) -> None:
+    if clear:
+        clear_screen()
+    print_txt(
+        '> (1) | ', f'{TRANSLATIONS["words"]}\t| {SETTINGS["words"]}', 1)
+    print_txt(
+        '> (2) | ', f'{TRANSLATIONS["language"]}\t| {SETTINGS["language"]}', 1)
+    print_txt(
+        '> (3) | ', f'{TRANSLATIONS["difficulty"]}\t| {SETTINGS["difficulty"]}', 1)
+    print_txt(
+        '> (4) | ', TRANSLATIONS["back"], 1)
+    if inp:
+        choice = input_choice((1, 2, 3, 4), settings_menu)
+        match choice:
+            case 1:
+                words_menu()
+                pass
+            case 2:
+                language_menu()
+                pass
+            case 3:
+                difficulty_menu()
+                pass
+            case 4:
+                main_menu()
+
+
+def words_menu(clear=True, inp=True) -> None:
+    if clear:
+        clear_screen()
+    print_txt(
+        '> (1) | ', f'{TRANSLATIONS["lng_words"]}\t| {SETTINGS["words"]}', 1)
+    print_txt('> (2) | ', TRANSLATIONS["add_word"], 1)
+    print_txt('> (3) | ', TRANSLATIONS["del_word"], 1)
+    print_txt('> (4) | ', TRANSLATIONS["back"], 1)
+    if inp:
+        choice = input_choice((1, 2, 3, 4), words_menu)
+        match choice:
+            case 1:
+                # lng_words_menu()
+                pass
+            case 2:
+                # add_word_menu()
+                pass
+            case 3:
+                # del_word_menu()
+                pass
+            case 4:
+                settings_menu()
+
+
+def language_menu(clear=True, inp=True) -> None:
+    if clear:
+        clear_screen()
+    print_txt('> (1) | ', 'ru', 1)
+    print_txt('> (2) | ', 'en', 1)
+    print_txt('> (3) | ', TRANSLATIONS["back"], 1)
+    if inp:
+        choice = input_choice((1, 2, 3), language_menu)
+        match choice:
+            case 1:
+                SETTINGS['language'] = 'ru'
+            case 2:
+                SETTINGS['language'] = 'en'
+        if choice == 3:
+            settings_menu()
+        elif choice in (1, 2):
+            init_settings('w')
+            init_translations(SETTINGS['language'])
+            main_menu()
+
+
+def difficulty_menu(clear=True, inp=True) -> None:
+    if clear:
+        clear_screen()
+    print_txt('> (1) | ', TRANSLATIONS["easy"], 1)
+    print_txt('> (2) | ', TRANSLATIONS["normal"], 1)
+    print_txt('> (3) | ', TRANSLATIONS["hard"], 1)
+    print_txt('> (4) | ', TRANSLATIONS["back"], 1)
+    if inp:
+        choice = input_choice((1, 2, 3, 4), difficulty_menu)
+        match choice:
+            case 1:
+                SETTINGS['difficulty'] = 'easy'
+            case 2:
+                SETTINGS['difficulty'] = 'normal'
+            case 3:
+                SETTINGS['difficulty'] = 'hard'
+        if choice == 4:
+            settings_menu()
+        elif choice in (1, 2, 3):
+            init_settings('w')
+            main_menu()
 
 
 def main() -> None:

@@ -2,9 +2,15 @@
     "ru": {
         "play": "Играть",
         "settings": "Настройки",
-        "words": "Язык Игры",
+        "words": "Язык Слов",
         "language": "Язык Меню",
         "difficulty": "Сложность",
+        "lng_words": "Выбрать язык",
+        "add_word": "Добавить слово",
+        "del_word": "Удалить слово",
+        "easy": "Легко",
+        "normal": "Нормально",
+        "hard": "Сложно",
         "back": "Назад",
         "exit": "Выход",
         "choice": "Выбор"
@@ -12,9 +18,15 @@
     "en": {
         "play": "Play",
         "settings": "Settings",
-        "words": "Game Language",
+        "words": "Words Language",
         "language": "Menu Language",
         "difficulty": "Difficulty",
+        "lng_words": "Choose a language",
+        "add_word": "Add word",
+        "del_word": "Delete word",
+        "easy": "Easy",
+        "normal": "Normal",
+        "hard": "Hard",
         "back": "Back",
         "exit": "Exit",
         "choice": "Choice"

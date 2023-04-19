@@ -16,6 +16,9 @@ lng = input('Язык: ').lower()
 category = input('Категория: ').upper()
 word = input('Слово: ').upper()
 
-WORDS[lng].setdefault(category, []).append(word)
+# WORDS[lng].setdefault(category, []).append(word)
 
+print(WORDS[lng])
+# del WORDS[lng][category]
+WORDS[lng][category].remove(word)
 print(WORDS[lng])

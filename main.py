@@ -37,12 +37,15 @@ def close(msg=None) -> None:
     __import__('sys').exit(msg)
 
 
-def input_choice(expected: list, menu=None, input_msg='') -> int | str:
+def input_choice(expected: tuple | int, menu=None, input_msg='') -> int | str:
     choice = 0
     while True:
         try:
             choice = int(input(Style.BRIGHT + Fore.YELLOW + '  -->   ' +
                                Fore.GREEN + input_msg))
+            if isinstance(expected, int) and 1 <= choice <= expected:
+                print()
+                return choice
             if choice in expected:
                 print()
                 return choice
@@ -304,17 +307,45 @@ def del_word_menu(clear=True, inp=True) -> None:
         if choice == 3:
             words_menu()
         else:
-            clear_screen()
-            lng = 'ru' if choice == 1 else 'en'
-            print_txt(f'{TRANSLATIONS["del_word"]} -> ', f'{lng}:', 1, Fore.CYAN)
-            i = 1
+            choice_del_word('ru' if choice == 1 else 'en')
+
+
+def choice_del_word(lng: str, clear=True, inp=True) -> None:
+    if clear:
+        clear_screen()
+    print_txt(f'{TRANSLATIONS["del_word"]} -> ', f'{lng}:', 1, Fore.CYAN)
+    i = 1
+    for category, words in WORDS[lng].items():
+        print_txt(f'> ({i})\t', f'{category}:', 1, Fore.CYAN)
+        for word in words:
+            i += 1
+            print_txt(f'> \t ({i})  ', f'{word}', 1, Fore.MAGENTA)
+        i += 1
+    print_txt(f'> (0) ', TRANSLATIONS["back"], 1)
+    if inp:
+        choice = input_choice(range(i))
+        if choice == 0:
+            words_menu()
+        else:
+            i = 0
             for category, words in WORDS[lng].items():
-                print_txt(f'> ({i})\t', f'{category}:', 1, Fore.CYAN)
+                i += 1
+                if choice == i:
+                    del WORDS[lng][category]
+                    break
                 for word in words:
                     i += 1
-                    print_txt(f'> \t ({i})  ', f'{word}', 1)
-                i += 1
-            print_txt(f'> ({i}) ', TRANSLATIONS["back"], 1)
+                    if choice == i:
+                        WORDS[lng][category].remove(word)
+                        if len(WORDS[lng][category]) == 0:
+                            del WORDS[lng][category]
+                        break
+                else:
+                    continue
+                break
+            init_json(mode='w')
+            main_menu()
+
 
 
 def main() -> None:

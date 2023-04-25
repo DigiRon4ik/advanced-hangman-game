@@ -400,7 +400,7 @@ def main() -> None:
     init_json()
     init_settings()
     init_translations(SETTINGS['language'])
-    # print_intro()
+    print_intro()
     main_menu(clear=False)
 
 

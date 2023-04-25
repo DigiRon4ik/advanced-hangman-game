@@ -15,11 +15,11 @@
 >
 > 2) In the folder with the repository, open the terminal.
 >
-> 3) Type:
-```sh
-python -m venv venv
-pip install -r requirements.txt
-```
+> 3) Type: ```python -m venv venv```
+>
+> 4) Activate the virtual environment. /venv/Script|bin/activate
+>
+> 5) Type: ```pip install -r requirements.txt```
 
 ---
 

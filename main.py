@@ -6,6 +6,8 @@ from random import choice
 from colorama import init
 from colorama import Fore, Back, Style
 
+from hangman_ascii import print_hangman
+
 init(autoreset=True)
 WORDS = {
     'ru': {
@@ -157,12 +159,58 @@ def main_menu(clear=True, inp=True) -> None:
         choice = input_choice((1, 2, 3), main_menu)
         match choice:
             case 1:
-                # play()
-                pass
+                play_game()
             case 2:
                 settings_menu()
             case 3:
                 close()
+
+
+def play_game(clear=True) -> None:
+    if clear:
+        clear_screen()
+
+    category, words = choice(list(WORDS[SETTINGS['words']].items()))
+    word = choice(words)
+    under_str = '_' * len(word)
+
+    part, clue = None, None
+    match SETTINGS["difficulty"]:
+        case 'easy':
+            part = 0
+            clue = category
+        case 'normal':
+            part = 2
+            clue = category
+        case 'hard':
+            part = 3
+
+    while True:
+        clear_screen()
+        print_hangman(part, Fore.MAGENTA)
+        if part == 9:
+            print(Fore.BLACK + Back.RED + 'You Loose!')
+            sleep(4)
+            break
+
+        if clue:
+            print(Fore.CYAN + clue + ':')
+        print(Fore.GREEN + under_str + '\n')
+
+        letter = input(Style.BRIGHT + Fore.YELLOW +
+                       '  -->   ' + Fore.GREEN)[0].upper()
+        if letter not in word:
+            part += 1
+        else:
+            for i in range(len(word)):
+                if letter == word[i]:
+                    under_str = under_str[:i] + letter + under_str[i+1:]
+        if under_str == word:
+            clear_screen()
+            print(Fore.BLUE + Back.GREEN + 'You Win!')
+            sleep(3)
+            break
+    main_menu()
 
 
 def settings_menu(clear=True, inp=True) -> None:
@@ -345,7 +393,6 @@ def choice_del_word(lng: str, clear=True, inp=True) -> None:
                 break
             init_json(mode='w')
             main_menu()
-
 
 
 def main() -> None:

@@ -10,6 +10,19 @@
 
 ---
 
+> ### How to Download/Use:
+> 1) Clone this repository.
+>
+> 2) In the folder with the repository, open the terminal.
+>
+> 3) Type:
+```sh
+python -m venv venv
+pip install -r requirements.txt
+```
+
+---
+
 ### Screenshots:
 <a href="https://ibb.co/Wc4fprt"><img src="https://i.ibb.co/wKF4rns/Main-Menu.png" alt="Main_Menu" border="0"></a>
 
@@ -22,6 +35,7 @@
 ---
 
 > Did it just for fun.
+
 > I know! There is a stack overflow problem.
 > As soon as the hands reach - I will fix it.
 
